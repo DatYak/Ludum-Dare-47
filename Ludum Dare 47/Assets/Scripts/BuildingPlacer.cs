@@ -7,7 +7,19 @@ public class BuildingPlacer : MonoBehaviour
 {
  
     private GameObject activlyPlacing;
-    public bool editing;
+    public bool editingTarget;
+
+    public Tool currentTool;
+
+    public Color buildColor;
+    public Color editColor;
+    public Color cablesColor;
+    public Color destroyColor;
+
+    public enum Tool
+    {
+        Building, Editing, Moving, Cables, Destroying
+    }
 
     public GameObject pressurePlate;
 
@@ -33,7 +45,7 @@ public class BuildingPlacer : MonoBehaviour
 
     public void Setup (string toBuildName)
     {
-        if (!editing)
+        if (!editingTarget)
             switch(toBuildName)
             {
                 case "pressurePlate":
@@ -54,79 +66,149 @@ public class BuildingPlacer : MonoBehaviour
         transform.position = new Vector3(Mathf.Round(Camera.main.ScreenToWorldPoint(Input.mousePosition).x),
             Mathf.Round(Camera.main.ScreenToWorldPoint(Input.mousePosition).y), 0);
 
+        if (!eventSys.IsPointerOverGameObject())
+        {
+            Hover();
+        }
+
+        if (Input.GetMouseButtonDown(0) && !eventSys.IsPointerOverGameObject())
+        {
+            ToolAction();
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            currentTool = Tool.Building;
+            this.GetComponent<SpriteRenderer>().color = buildColor;
+            GameManager.gm.uimanager.itemDock.gameObject.SetActive(true);
+        }
+            
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            currentTool = Tool.Editing;
+            this.GetComponent<SpriteRenderer>().color = editColor;
+            GameManager.gm.uimanager.itemDock.gameObject.SetActive(false);
+        }
+            
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            currentTool = Tool.Cables;
+            this.GetComponent<SpriteRenderer>().color = cablesColor;
+            GameManager.gm.uimanager.itemDock.gameObject.SetActive(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            currentTool = Tool.Destroying;
+            this.GetComponent<SpriteRenderer>().color = destroyColor;
+            GameManager.gm.uimanager.itemDock.gameObject.SetActive(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z) && !Input.GetKey(KeyCode.LeftShift))
+        {
+            GameManager.gm.actionRegistrar.UndoCommand();
+        }
+        if (Input.GetKeyDown(KeyCode.Z) && Input.GetKey(KeyCode.LeftShift))
+        {
+            GameManager.gm.actionRegistrar.RedoCommand();
+        }
+    }
+
+    private void Hover()
+    {
+        
         if (connecting)
         {
             currentCable.Setup(firstPoint.transform.position, transform.position);
         }
 
-        if (!eventSys.IsPointerOverGameObject())
+        Structure newHover = GameManager.gm.GetNodeOccupant(transform.position);
+    
+        if (newHover != null)
         {
-           Structure newHover = GameManager.gm.GetNode(transform.position);
-        
-            if (newHover != null)
-            {
-                if (hovering != newHover)
-                {
-                    if (hovering != null)
-                        foreach (Cable c in hovering.connectedCables)
-                        {
-                            c.Hide();
-                        }
-                    
-                    foreach (Cable c in newHover.connectedCables)
-                    {
-                        c.Show();
-                    }
-                    
-                    hovering = newHover;
-                }
-            }
-            else
+            if (hovering != newHover)
             {
                 if (hovering != null)
                     foreach (Cable c in hovering.connectedCables)
                     {
                         c.Hide();
                     }
-
-                hovering = null;
+                
+                foreach (Cable c in newHover.connectedCables)
+                {
+                    c.Show();
+                }
+                
+                hovering = newHover;
             }
         }
-
-        if (Input.GetMouseButtonDown(0) && !eventSys.IsPointerOverGameObject())
+        else
         {
-            if (activlyPlacing != null)
-            {
-                if (GameManager.gm.GetNode(transform.position) != null)
-                    GameManager.gm.GetNode(transform.position).Destroy();
-                Instantiate (activlyPlacing, transform.position, Quaternion.identity);
-                activlyPlacing = null;
-            }
-            else
-            {
-                if (!editing)
+            if (hovering != null)
+                foreach (Cable c in hovering.connectedCables)
                 {
-                    GameManager.gm.EditNode(transform.position);
-                    editing = true;
+                    c.Hide();
                 }
-                else
-                {
-                    GameManager.gm.uimanager.HideStructureSettingsUI();
-                    editing = false;
-                }
-            }
+
+            hovering = null;
         }
+    }
 
-        if (Input.GetMouseButtonDown(1))
+    private void ToolAction ()
+    {
+        switch(currentTool)
         {
-            Connect();
+            case Tool.Building:
+                BuildStructure();
+                break;
+            case Tool.Editing:
+                Edit();
+                break;
+            case Tool.Cables:
+                Connect();
+                break;
+            case Tool.Destroying:
+                DestroyStructure();
+                break;
+        }
+    }
+
+
+    private void Edit ()
+    {
+        if (!editingTarget)
+        {
+            GameManager.gm.EditNode(transform.position);
+            editingTarget = true;
+        }
+        else
+        {
+            GameManager.gm.uimanager.HideStructureSettingsUI();
+            editingTarget = false;
+        }
+    }
+
+    public void DestroyStructure ()
+    {
+        if (GameManager.gm.GetNodeOccupant(transform.position) != null)
+            GameManager.gm.GetNodeOccupant(transform.position).Destroy();
+    }
+
+    private void BuildStructure ()
+    {
+        if (activlyPlacing != null)
+        {
+            DestroyStructure();
+
+            IAction action = new BuildCommand(activlyPlacing, transform.position);
+            GameManager.gm.actionRegistrar.ExecuteCommand(action);
         }
     }
 
     private void Connect ()
     {
     
-        Structure target = GameManager.gm.GetNode(transform.position);
+        Structure target = GameManager.gm.GetNodeOccupant(transform.position);
         
         bool selectedUser = false;
         bool selectedCreator = false;

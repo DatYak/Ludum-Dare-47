@@ -48,8 +48,11 @@ MonoBehaviour:
   sprite: {fileID: 370177980240662337}
   unpoweredColor: {r: 1, g: 0, b: 0.6117647, a: 1}
   poweredColor: {r: 1, g: 0, b: 0.61292124, a: 1}
+  connectedCables: []
   dependants: []
   normalLoopyPrefab: {fileID: 7713760165366043357, guid: 773bc7d43f3071840a1a77a83c9bc9c4,
+    type: 3}
+  speedyLoopyPrefab: {fileID: 8216995533189129418, guid: 6221c1abe3988c74ebd948207b317976,
     type: 3}
   spawnDirection: {x: 0, y: 0}
   spawnInterval: 1

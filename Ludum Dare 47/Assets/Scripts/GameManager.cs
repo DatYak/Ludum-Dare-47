@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public float movespeed = 0;
 
     public UIManager uimanager;
+    public ActionHistoryManager actionRegistrar;
 
     public List<GridNode> nodes;
 
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
         {
             gm = this;
             nodes = new List<GridNode>();
+            actionRegistrar = GetComponent<ActionHistoryManager>();
         }
         else
         {
@@ -33,7 +35,6 @@ public class GameManager : MonoBehaviour
     {
         uimanager = toRegister;
     }
-
     private void Start() 
     {
         placer = Instantiate(blueprint, Vector3.zero, Quaternion.identity).GetComponent<BuildingPlacer>();
@@ -66,7 +67,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public Structure GetNode (Vector2 location)
+    public Structure GetNodeOccupant (Vector2 location)
     {
         bool nodeFound = false;
         for (int i = 0; i < nodes.Count; i++)
@@ -83,10 +84,37 @@ public class GameManager : MonoBehaviour
         }
         return null;
     }
+    public GridNode GetNode (Vector2 location)
+    {
+        bool nodeFound = false;
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            if (nodeFound) break;
+            if (nodes[i].location == location)
+            {
+                nodeFound = true;
+                if (!nodes[i].isEmpty)
+                {
+                    return nodes[i];
+                }
+            }
+        }
+        return new GridNode(false);
+    }
+    
+    public void DestroyNode (Vector2 location)
+    {
+        GridNode toDestroy = GetNode(location);
+        if (toDestroy.isReal == true)
+        {
+            nodes.Remove (toDestroy);
+        }
+
+    }
 
     public void EditNode (Vector2 location)
     {
-        Structure toEdit = GetNode(location);
+        Structure toEdit = GetNodeOccupant(location);
         if (toEdit != null)
         {
             uimanager.ShowStructureSettingsUI(toEdit);
@@ -111,16 +139,26 @@ public class GameManager : MonoBehaviour
 public struct GridNode
 {
 
+    public bool isReal;
+
     public Vector2 location;
 
     public Structure occupant;
 
     public bool isEmpty {get {return occupant == null;}}
 
-    public GridNode (Vector2 loc, Structure buildToAdd)
+    public GridNode (Vector2 loc, Structure buildToAdd, bool exists = true)
     {
+        isReal = true;
         location = loc;
         occupant = buildToAdd;
+    }
+    public GridNode (bool exists)
+    {
+        isReal = false;
+        location = Vector2.zero;
+        occupant = new Structure();
+
     }
 
     public void SetOccupant(Structure newOcc)

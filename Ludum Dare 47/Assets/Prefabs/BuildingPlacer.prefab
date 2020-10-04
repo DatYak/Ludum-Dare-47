@@ -95,7 +95,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a4bd085c493724180e257fa66fb82c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  editing: 0
+  editingTarget: 0
+  currentTool: 0
+  buildColor: {r: 0.32452828, g: 0.91527355, b: 1, a: 1}
+  editColor: {r: 0.49019742, g: 0.8679245, b: 0.38810962, a: 1}
+  cablesColor: {r: 1, g: 0.7208413, b: 0, a: 1}
+  destroyColor: {r: 1, g: 0, b: 0, a: 1}
   pressurePlate: {fileID: 1851994923773874792, guid: 4eb5da4176532294287779facedffc5d,
     type: 3}
   rotator: {fileID: 2267820988339851963, guid: ad4658b4d110e3643a0e2ab62b350600, type: 3}

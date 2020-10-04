@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6226060868247752483}
   - component: {fileID: 6226060868247752480}
+  - component: {fileID: 4243586972827624541}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -45,3 +46,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blueprint: {fileID: 8085203444994238829, guid: a5b4c1ea75d7b9e4ba5de1699c1702fa,
     type: 3}
+  movespeed: 0
+  uimanager: {fileID: 0}
+  actionRegistrar: {fileID: 0}
+--- !u!114 &4243586972827624541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226060868247752481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78319a7fddf65c345a9126c15c775f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
