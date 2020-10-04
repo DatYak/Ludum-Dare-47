@@ -220,6 +220,16 @@ public class BuildingPlacer : MonoBehaviour
             {
                 if (hasUser && selectedUser) return;
                 if (hasCreator && selectedCreator) return;
+
+                IAction action = new CablingAction(target, firstPoint);
+                GameManager.gm.actionRegistrar.ExecuteCommand(action);
+
+                Destroy(currentCable.gameObject);
+                firstPoint = null;
+                connecting = false;
+                hasUser = false;
+                hasCreator = false;
+
             }
             else if (!connecting)
             {
@@ -227,7 +237,7 @@ public class BuildingPlacer : MonoBehaviour
                 if (selectedCreator) hasCreator = true;
                 if (selectedUser) hasUser = true;
                 connecting = true;
-                currentCable = Instantiate(GameManager.gm.cablePrefab);
+                currentCable = Instantiate(GameManager.gm.cablePrefab).GetComponent<Cable>();
             }
         }
         else if (connecting)

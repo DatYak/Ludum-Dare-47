@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     public GameObject rotator;
     public GameObject influenceLight;
     
-    public Cable cablePrefab;
+    public GameObject cablePrefab;
 
     private void Awake() 
     {
