@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Structure : MonoBehaviour
 {
+
     public string displayName;
+
+
+    public StructureType thisType;
 
     public SpriteRenderer sprite;
     //TODO: Change color shift to a sprite change 
@@ -81,4 +86,13 @@ public class DropdownParamater : Paramater
     }
     public List<string> options;
     public int selected;
+}
+
+
+
+public enum StructureType
+{
+    PressurePlate,
+    Rotator,
+    Light,
 }

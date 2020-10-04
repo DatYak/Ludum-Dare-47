@@ -21,12 +21,6 @@ public class BuildingPlacer : MonoBehaviour
         Building, Editing, Moving, Cables, Destroying
     }
 
-    public GameObject pressurePlate;
-
-    public GameObject rotator;
-    public GameObject influenceLight;
-    
-    public Cable cablePrefab;
     private Cable currentCable;
 
     Structure hovering;
@@ -49,13 +43,13 @@ public class BuildingPlacer : MonoBehaviour
             switch(toBuildName)
             {
                 case "pressurePlate":
-                    activlyPlacing = pressurePlate;
+                    activlyPlacing = GameManager.gm.pressurePlate;
                     break;
                 case "rotator":
-                    activlyPlacing = rotator;
+                    activlyPlacing = GameManager.gm.rotator;
                     break;
                 case "influenceLight":
-                    activlyPlacing = influenceLight;
+                    activlyPlacing = GameManager.gm.influenceLight;
                     break;
             }
     }
@@ -104,11 +98,11 @@ public class BuildingPlacer : MonoBehaviour
             GameManager.gm.uimanager.itemDock.gameObject.SetActive(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && !Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             GameManager.gm.actionRegistrar.UndoCommand();
         }
-        if (Input.GetKeyDown(KeyCode.Z) && Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             GameManager.gm.actionRegistrar.RedoCommand();
         }
@@ -188,20 +182,24 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    public void DestroyStructure ()
-    {
-        if (GameManager.gm.GetNodeOccupant(transform.position) != null)
-            GameManager.gm.GetNodeOccupant(transform.position).Destroy();
-    }
-
     private void BuildStructure ()
     {
         if (activlyPlacing != null)
         {
-            DestroyStructure();
+            if (GameManager.gm.GetNodeOccupant(transform.position) == null)
+            {
+                IAction action = new BuildCommand(activlyPlacing, transform.position);
+                GameManager.gm.actionRegistrar.ExecuteCommand(action);  
+            }
+        }
+    }
 
-            IAction action = new BuildCommand(activlyPlacing, transform.position);
-            GameManager.gm.actionRegistrar.ExecuteCommand(action);
+    private void DestroyStructure ()
+    {
+        if (GameManager.gm.GetNodeOccupant(transform.position) != null)
+        {
+            IAction action = new DestroyCommand(transform.position);
+            GameManager.gm.actionRegistrar.ExecuteCommand(action);  
         }
     }
 
@@ -222,34 +220,6 @@ public class BuildingPlacer : MonoBehaviour
             {
                 if (hasUser && selectedUser) return;
                 if (hasCreator && selectedCreator) return;
-
-                if (hasUser)
-                {
-                    PowerCreator creator = target as PowerCreator;
-                    creator.dependants.Add(firstPoint as PowerUser);
-                    connecting = false;
-                    currentCable.Setup(target.transform.position, firstPoint.transform.position);
-                    firstPoint.connectedCables.Add(currentCable);
-                    target.connectedCables.Add(currentCable);
-                    currentCable.Hide();
-                    currentCable = null;
-                    hasUser = false;
-                    hasCreator = false;
-                }
-                
-                if (hasCreator)
-                {
-                    PowerUser user = target as PowerUser;
-                    (firstPoint as PowerCreator).dependants.Add(user);
-                    connecting = false;
-                    currentCable.Setup(target.transform.position, firstPoint.transform.position);
-                    firstPoint.connectedCables.Add(currentCable);
-                    target.connectedCables.Add(currentCable);
-                    currentCable.Hide();
-                    currentCable = null;
-                    hasUser = false;
-                    hasCreator = false;
-                }
             }
             else if (!connecting)
             {
@@ -257,7 +227,7 @@ public class BuildingPlacer : MonoBehaviour
                 if (selectedCreator) hasCreator = true;
                 if (selectedUser) hasUser = true;
                 connecting = true;
-                currentCable = Instantiate(cablePrefab);
+                currentCable = Instantiate(GameManager.gm.cablePrefab);
             }
         }
         else if (connecting)

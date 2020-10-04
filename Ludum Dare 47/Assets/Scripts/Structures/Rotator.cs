@@ -9,18 +9,22 @@ public class Rotator : PowerUser
     public override void Start() 
     {
         displayName = "Rotator";
-        
-        paramaters = new Paramater[1];
 
-        List<string> faceOptions =  new List<string>
+        if (paramaters == null)
         {
-            "Up",
-            "Down",
-            "Left",
-            "Right"
-        };
+            paramaters = new Paramater[1];
 
-        paramaters[0] = new DropdownParamater ("Turn to face:", faceOptions);
+            List<string> faceOptions =  new List<string>
+            {
+                "Up",
+                "Down",
+                "Left",
+                "Right"
+            };
+             paramaters[0] = new DropdownParamater ("Turn to face:", faceOptions);
+        }
+        
+        thisType = StructureType.Rotator;
 
         base.Start();
     }

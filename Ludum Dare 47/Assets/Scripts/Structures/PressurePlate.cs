@@ -12,11 +12,17 @@ public class PressurePlate : PowerCreator
     {
         displayName = "Pressure Plate";
 
-        paramaters = new Paramater[1];
+        if (paramaters == null)
+        {
 
-        paramaters[0] = new DecimalParamater("Sustain", 0.5f);
+            paramaters = new Paramater[1];
 
-        SetupStructure();
+            paramaters[0] = new DecimalParamater("Sustain", 0.5f);
+
+            thisType = StructureType.PressurePlate;
+        }
+        
+        base.Start();
     }
 
     void Update()

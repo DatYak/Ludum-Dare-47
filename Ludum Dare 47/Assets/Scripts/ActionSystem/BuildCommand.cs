@@ -23,6 +23,6 @@ public class BuildCommand : IAction
 
     public void UndoCommand ()
     {
-        GameObject.Destroy (instantiatedObject);   
+        instantiatedObject.GetComponent<Structure>().Destroy();  
     }
 }

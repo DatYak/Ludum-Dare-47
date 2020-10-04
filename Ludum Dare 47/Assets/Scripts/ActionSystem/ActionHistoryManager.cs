@@ -29,7 +29,7 @@ public class ActionHistoryManager : MonoBehaviour
         if (redoHistory.Count > 0)
         {
             history.Push(redoHistory.Peek());
-            redoHistory.Pop().UndoCommand();
+            redoHistory.Pop().ExecuteCommand();
         }
     }
 

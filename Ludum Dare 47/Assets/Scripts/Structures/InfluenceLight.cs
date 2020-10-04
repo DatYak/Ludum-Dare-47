@@ -13,11 +13,15 @@ public class InfluenceLight : PowerUser
     {
         displayName = "Influence Light";
 
-        paramaters = new Paramater[1];
-        paramaters[0] = new DecimalParamater("Radius:", radius);
+        if (paramaters == null)
+        {
+            paramaters = new Paramater[1];
+            paramaters[0] = new DecimalParamater("Radius:", radius);
+        }
 
-        SetupStructure();
-        UpdatePower();
+        thisType = StructureType.Light;
+
+        base.Start();
         UpdateRadius();
     }
 

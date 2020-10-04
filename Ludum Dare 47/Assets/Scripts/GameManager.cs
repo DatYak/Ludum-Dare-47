@@ -16,6 +16,13 @@ public class GameManager : MonoBehaviour
 
     public List<GridNode> nodes;
 
+    public GameObject pressurePlate;
+
+    public GameObject rotator;
+    public GameObject influenceLight;
+    
+    public Cable cablePrefab;
+
     private void Awake() 
     {
         if (gm == null)
