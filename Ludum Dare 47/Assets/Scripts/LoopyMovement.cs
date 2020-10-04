@@ -31,6 +31,6 @@ public class LoopyMovement : MonoBehaviour
             }
         }
 
-        transform.Translate(lookDir * moveSpeed * Time.deltaTime);
+        transform.Translate(lookDir * moveSpeed * Time.deltaTime * GameManager.gm.movespeed);
     }
 }

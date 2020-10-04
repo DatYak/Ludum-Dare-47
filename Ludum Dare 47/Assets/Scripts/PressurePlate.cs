@@ -4,19 +4,41 @@ using UnityEngine;
 
 public class PressurePlate : PowerCreator
 {
+
+    public float sustain;
     private float currentSustain = 0;
+
+    public override void Start() 
+    {
+        displayName = "Pressure Plate";
+
+        paramaters = new Paramater[1];
+
+        paramaters[0] = new DecimalParamater("Sustain", 0.5f);
+
+        SetupStructure();
+    }
 
     void Update()
     {
-        
-        Collider2D occupantCheck = Physics2D.OverlapBox(transform.position, new Vector2 (transform.localScale.x, transform.localScale.y), 0);
-        if (occupantCheck == null)
-        {
+
+        if (currentSustain > 0)
+            currentSustain -= Time.deltaTime;
+        else
             UnPower();
-        }
-        else if (occupantCheck.tag == "Player")
-        {
-            Power();
-        }
+
+        Collider2D occupantCheck = Physics2D.OverlapBox(transform.position, new Vector2 (transform.localScale.x, transform.localScale.y), 0);
+        
+        if (occupantCheck != null)
+            if (occupantCheck.tag == "Player")
+            {
+                Power();
+                currentSustain = sustain;
+            }
+    }
+    
+    public virtual void UpdateWithParams (Paramater[] paramaters)
+    {
+        sustain = (paramaters[0] as DecimalParamater).value;
     }
 }

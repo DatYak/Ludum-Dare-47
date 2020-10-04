@@ -209,9 +209,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d186e67945d2a774b9c06660578d9177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasPower: 0
-  renderer: {fileID: 3643505877240472393}
+  displayName: 
+  sprite: {fileID: 3643505877240472393}
   unpoweredColor: {r: 0, g: 0, b: 0, a: 1}
   poweredColor: {r: 1, g: 0, b: 0.6801233, a: 1}
+  hasPower: 0
   radius: 2
   radiusVisual: {fileID: 3643505877235404744}

@@ -11,7 +11,19 @@ public class InfluenceLight : PowerUser
 
     public override void Start() 
     {
+        displayName = "Influence Light";
+
+        paramaters = new Paramater[1];
+        paramaters[0] = new DecimalParamater("Radius:", radius);
+
+        SetupStructure();
         UpdatePower();
+        UpdateRadius();
+    }
+
+    public override void UpdateWithParams(Paramater[] paramaters)
+    {
+        radius = (paramaters[0] as DecimalParamater).value;
         UpdateRadius();
     }
 

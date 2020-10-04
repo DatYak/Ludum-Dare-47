@@ -6,9 +6,60 @@ public class Rotator : PowerUser
 {
     public Vector2 turnToDir;
 
+    public override void Start() 
+    {
+        displayName = "Rotator";
+        
+        paramaters = new Paramater[1];
+
+        List<string> faceOptions =  new List<string>
+        {
+            "Up",
+            "Down",
+            "Left",
+            "Right"
+        };
+
+        paramaters[0] = new DropdownParamater ("Turn to face:", faceOptions);
+
+        SetupStructure();
+        UpdatePower();
+    }
+
+    public override void UpdateWithParams (Paramater[] paramaters)
+    {
+        
+        int dirIndex;
+
+        dirIndex = (paramaters[0] as DropdownParamater).selected;
+
+        switch (dirIndex)
+        {
+            case 0:
+                turnToDir = Vector2.up;
+                sprite.transform.rotation = Quaternion.Euler(0,0,180);
+                break;
+
+            case 1:
+                turnToDir = Vector2.down;
+                sprite.transform.rotation = Quaternion.Euler(0,0,0);
+                break;
+
+            case 2:
+                turnToDir = Vector2.left;
+                sprite.transform.rotation = Quaternion.Euler(0,0,270);
+                break;
+
+            case 3:
+                turnToDir = Vector2.right;
+                sprite.transform.rotation = Quaternion.Euler(0,0,90);
+                break;
+            
+        }
+    }
+
     void Update()
     {
-
         UpdatePower();
 
         if (hasPower)

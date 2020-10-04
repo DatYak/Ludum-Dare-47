@@ -2,23 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUser : MonoBehaviour
+public class PowerUser : Structure
 {
     public bool hasPower;
 
-    public SpriteRenderer renderer;
-    //TODO: Change color shift to a sprite change 
-    public Color unpoweredColor;
-    public Color poweredColor;
-
     public virtual void Start() 
     {
+        SetupStructure();
         UpdatePower();
+        UpdateWithParams(paramaters);
     }
-
-    public void UpdatePower () 
+    
+    public override void UpdatePower()
     {
-        renderer.color = hasPower ? poweredColor : unpoweredColor;    
+        sprite.color = hasPower ? poweredColor : unpoweredColor;
     }
-
 }
