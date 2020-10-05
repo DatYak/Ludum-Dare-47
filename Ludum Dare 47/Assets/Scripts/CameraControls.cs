@@ -10,6 +10,8 @@ public class CameraControls : MonoBehaviour
 
     private Vector3 desiredPos;
 
+    public Transform camTransform;
+
     private void Start() {
         currentZoom = Camera.main.orthographicSize;
     }
@@ -18,6 +20,7 @@ public class CameraControls : MonoBehaviour
     {
         Pan();
         Zoom();
+        Rotate();
     }
 
     int vertMove;
@@ -42,7 +45,7 @@ public class CameraControls : MonoBehaviour
         {
             horMove = 1;
         }
-        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) )
+        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             horMove = -1;
         }
@@ -59,9 +62,16 @@ public class CameraControls : MonoBehaviour
     private void Zoom()
     {
         //Scroll wheel is inverted
-        currentZoom -= Input.mouseScrollDelta.y * cameraZoomSpeed;
-        currentZoom = Mathf.Clamp(currentZoom, 1, 20);
-        Camera.main.orthographicSize = currentZoom;
+        currentZoom -= Input.mouseScrollDelta.y * -cameraZoomSpeed;
+        currentZoom = Mathf.Clamp(currentZoom, -20f, -1f);
+
+        camTransform.position = new Vector3(transform.position.x, transform.position.y, currentZoom);
+
+    }
+
+    private void Rotate ()
+    {
+        
     }
 
 }
