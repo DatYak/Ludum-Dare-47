@@ -7,10 +7,14 @@ public class LoopySpawn : PowerCreator
 
     public LoopyMovement normalLoopyPrefab;
     public LoopyMovement speedyLoopyPrefab;
+    public LoopyMovement lazyLoopyPrefab;
     public Vector2 spawnDirection;
 
     public float spawnInterval = 1;
     private float timeToNextSpawn;
+
+    public LoopyType[] loopySpawnOrder;
+    public int loopySpawnIndex = 0;
 
     public override void Start()
     {
@@ -44,13 +48,46 @@ public class LoopySpawn : PowerCreator
         {
             SpawnLoopy();
         }
+
+        //funtion as a rototator
+        Collider2D occupantCheck = Physics2D.OverlapBox(transform.position, new Vector2 (transform.localScale.x, transform.localScale.y), 0);
+        if (occupantCheck != null)
+            if (occupantCheck.tag == "Player")
+            {
+                LoopyMovement occupant = occupantCheck.gameObject.GetComponent<LoopyMovement>();
+                if (occupant.lookDir != spawnDirection)
+                {
+                    occupant.turnTo = spawnDirection;
+                    occupant.turnLoc = transform.position;
+                }
+            }
     }
 
     public void SpawnLoopy ()
     {
-        LoopyMovement newLoopyMovement = Instantiate(speedyLoopyPrefab, transform.position, Quaternion.identity);
+
+        if (loopySpawnIndex >= loopySpawnOrder.Length)
+            return;
+        
+        LoopyMovement toSpawn = normalLoopyPrefab;
+
+        switch (loopySpawnOrder[loopySpawnIndex])
+        {
+            case LoopyType.normal:
+                toSpawn = normalLoopyPrefab;
+                break;
+            case LoopyType.speedy:
+                toSpawn = speedyLoopyPrefab;
+                break;
+            case LoopyType.lazy:
+                toSpawn = lazyLoopyPrefab;
+                break;
+        }
+        LoopyMovement newLoopyMovement = Instantiate(toSpawn, transform.position, Quaternion.identity);
         newLoopyMovement.lookDir = spawnDirection;
         timeToNextSpawn = spawnInterval;
+
+        loopySpawnIndex++;
     }
 
     public override void UpdateWithParams(Paramater[] paramaters)
@@ -66,22 +103,18 @@ public class LoopySpawn : PowerCreator
         {
             case 0:
                 spawnDirection = Vector2.up;
-                sprite.transform.rotation = Quaternion.Euler(0,0,0);
                 break;
 
             case 1:
                 spawnDirection = Vector2.down;
-                sprite.transform.rotation = Quaternion.Euler(0,0,180);
                 break;
 
             case 2:
                 spawnDirection = Vector2.left;
-                sprite.transform.rotation = Quaternion.Euler(0,0,90);
                 break;
 
             case 3:
                 spawnDirection = Vector2.right;
-                sprite.transform.rotation = Quaternion.Euler(0,0,270);
                 break;
             
         }
@@ -90,5 +123,11 @@ public class LoopySpawn : PowerCreator
     {
         Debug.Log("Can't destroy Spawn!");
     }
+}
 
+public enum LoopyType
+{
+    normal,
+    speedy,
+    lazy
 }

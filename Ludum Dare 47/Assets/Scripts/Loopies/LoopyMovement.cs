@@ -18,6 +18,12 @@ public class LoopyMovement : MonoBehaviour
     //at what location to turn
     public Vector2 turnLoc;
 
+    public LoopyAnimator anim;
+
+    private void Start() {
+        anim = GetComponentInChildren<LoopyAnimator>();
+    }
+
     public virtual void Update()
     {
         if (turnTo != Vector2.zero)
@@ -27,6 +33,10 @@ public class LoopyMovement : MonoBehaviour
                 transform.position = turnLoc;
                 lookDir = turnTo;
                 turnTo = turnLoc = Vector2.zero;
+
+                if (lookDir.x > 0) anim.rightFacing = true;
+                if (lookDir.x < 0) anim.rightFacing = false;
+
             }
         }
 

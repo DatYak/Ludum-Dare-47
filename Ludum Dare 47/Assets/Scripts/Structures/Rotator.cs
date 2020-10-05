@@ -40,22 +40,22 @@ public class Rotator : PowerUser
         {
             case 0:
                 turnToDir = Vector2.up;
-                sprite.transform.rotation = Quaternion.Euler(0,0,180);
+                sprite.transform.up = Vector2.down;
                 break;
 
             case 1:
                 turnToDir = Vector2.down;
-                sprite.transform.rotation = Quaternion.Euler(0,0,0);
+                sprite.transform.up = Vector2.up;
                 break;
 
             case 2:
                 turnToDir = Vector2.left;
-                sprite.transform.rotation = Quaternion.Euler(0,0,270);
+                sprite.transform.up = Vector2.right;
                 break;
 
             case 3:
                 turnToDir = Vector2.right;
-                sprite.transform.rotation = Quaternion.Euler(0,0,90);
+                sprite.transform.up = Vector2.left;
                 break;
             
         }

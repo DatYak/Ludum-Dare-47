@@ -71,7 +71,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 40c3765829f23f245bc3c6b289bb59c7, type: 3}
   m_Color: {r: 0.5683161, g: 0.8718188, b: 0.9811321, a: 1}
   m_FlipX: 0
@@ -101,11 +101,4 @@ MonoBehaviour:
   editColor: {r: 0.49019742, g: 0.8679245, b: 0.38810962, a: 1}
   cablesColor: {r: 1, g: 0.7208413, b: 0, a: 1}
   destroyColor: {r: 1, g: 0, b: 0, a: 1}
-  pressurePlate: {fileID: 1851994923773874792, guid: 4eb5da4176532294287779facedffc5d,
-    type: 3}
-  rotator: {fileID: 2267820988339851963, guid: ad4658b4d110e3643a0e2ab62b350600, type: 3}
-  influenceLight: {fileID: 3643505878483290200, guid: da51b12a74abd094eb591d73ee606666,
-    type: 3}
-  cablePrefab: {fileID: 3733686408417366145, guid: 658ad448b851b834a918de3ec19a862c,
-    type: 3}
   connecting: 0

@@ -55,8 +55,12 @@ MonoBehaviour:
     type: 3}
   speedyLoopyPrefab: {fileID: 8216995533189129418, guid: 6221c1abe3988c74ebd948207b317976,
     type: 3}
+  lazyLoopyPrefab: {fileID: 7626194936046857725, guid: 5b4a645a2c02ec040b2f8fec5c33b191,
+    type: 3}
   spawnDirection: {x: 0, y: 0}
   spawnInterval: 1
+  loopySpawnOrder: 020000000000000001000000
+  loopySpawnIndex: 0
 --- !u!1 &3779041200762757629
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,13 +85,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3779041200762757629}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1487107085667385853}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &370177980240662337
 SpriteRenderer:
   m_ObjectHideFlags: 0

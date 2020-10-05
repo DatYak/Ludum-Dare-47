@@ -57,8 +57,21 @@ public class BuildingPlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(Mathf.Round(Camera.main.ScreenToWorldPoint(Input.mousePosition).x),
-            Mathf.Round(Camera.main.ScreenToWorldPoint(Input.mousePosition).y), 0);
+        Vector3 mouseWorldPos;
+
+        // mouseWorldPos = Camera.main.transform.position + dir;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
+
+        RaycastHit hit;
+
+        Physics.Raycast (ray, out hit);
+
+        mouseWorldPos = ray.GetPoint(hit.distance);
+
+        transform.position = new Vector3(Mathf.Round(mouseWorldPos.x), Mathf.Round(mouseWorldPos.y), 0);
 
         if (!eventSys.IsPointerOverGameObject())
         {
